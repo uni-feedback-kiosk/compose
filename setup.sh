@@ -110,7 +110,7 @@ download_app() {
   echo -e "Done\n"
 }
 
-steps=(configure_file_server configure_app create_user configure_launch download_app)
+steps=(create_user configure_launch configure_file_server configure_app download_app)
 steps_count="${#steps[@]}"
 
 for i in "${!steps[@]}"
