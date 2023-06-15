@@ -27,8 +27,7 @@ create_user() {
 configure_launch() {
   echo "Configuring automatic app launch"
 
-  echo "Configuring getty service"
-
+  echo "Configuring getty@tty1 service"
   CONFIG_FOLDER="/etc/systemd/system/getty@tty1.service.d/"
   sudo mkdir -p "$CONFIG_FOLDER"
 
@@ -43,6 +42,9 @@ configure_launch() {
 
   echo "Copying xinit script"
   sudo cp "${TEMPLATES_FOLDER}/.xinitrc" "$USER_FOLDER"
+
+  echo "Reloading systemd services"
+  sudo systemctl daemon-reload
 
   echo -e "Done\n"
 }
