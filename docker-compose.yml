@@ -7,11 +7,13 @@ volumes:
 services:
   admin-panel:
     image: ghcr.io/uni-feedback-kiosk/admin-app:latest
+    restart: unless-stopped
     ports:
     - "3000:80"
 
   api-proxy:
     image: ghcr.io/ntdesmond/gunicorn-nginx-proxy:latest
+    restart: unless-stopped
     ports:
     - "8000:80"
     environment:

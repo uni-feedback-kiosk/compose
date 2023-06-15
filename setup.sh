@@ -130,11 +130,20 @@ download_app() {
   echo -e "Done\n"
 }
 
-finish() {
-  echo "Reboot to see if the configuration works fine."
+launch() {
+  echo "Launch system"
+
+  echo "Launching Docker Compose project"
+  sudo docker compose pull
+  sudo docker compose up -d
+
+  echo "The installer will now try to launch the UI app."
+  echo "You may also want to check if the app will launch after OS reboot."
+  read -rsn1 -p"Press any key to continue."
+  sudo systemctl restart getty@tty1
 }
 
-steps=(create_user configure_launch configure_file_server configure_app install_docker download_app finish)
+steps=(create_user configure_launch configure_file_server configure_app install_docker download_app launch)
 steps_count="${#steps[@]}"
 
 for i in "${!steps[@]}"
