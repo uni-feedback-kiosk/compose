@@ -108,7 +108,7 @@ configure_app() {
 }
 
 download_app() {
-  if [ -f "$ASSET_PATH" ]
+  if sudo -u "$TARGET_USER" test -f "$ASSET_PATH"
   then
     echo "${ASSET_PATH} already exists, skipping download"
     return
