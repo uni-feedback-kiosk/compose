@@ -6,7 +6,7 @@ REPOSITORY="uni-feedback-kiosk/app"
 ASSET_NAME="uni-feedback-kiosk-app.AppImage"
 TARGET_USER="kiosk"
 
-USER_FOLDER=$(eval echo ~$TARGET_USER)
+USER_FOLDER="/home/$TARGET_USER"
 ASSET_PATH="${USER_FOLDER}/${ASSET_NAME}"
 USER_XINIT_PATH="${USER_FOLDER}/.xinitrc"
 
