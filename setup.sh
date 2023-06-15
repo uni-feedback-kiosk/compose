@@ -6,7 +6,7 @@ REPOSITORY="uni-feedback-kiosk/app"
 ASSET_NAME="uni-feedback-kiosk-app.AppImage"
 TARGET_USER="kiosk"
 
-USER_FOLDER="~${TARGET_USER}"
+USER_FOLDER=$(eval echo ~$TARGET_USER)
 ASSET_PATH="${USER_FOLDER}/${ASSET_NAME}"
 
 create_user() {
@@ -98,7 +98,7 @@ configure_app() {
   done
 
   echo "Substituting variables"
-  sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/app.env" > "~${TARGET_USER}/.env"
+  sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/app.env" | sudo tee "~${TARGET_USER}/.env" >/dev/null
 
   echo -e "Done\n"
 }
