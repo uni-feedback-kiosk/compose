@@ -71,7 +71,6 @@ configure_file_server() {
 
   echo "Substituting variables"
   sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/.env" > .env
-  echo "${TEMPLATES_FOLDER}/ppfs.yaml"
   sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/ppfs.yaml" > ppfs.yaml
 
   echo -e "Done\n"
