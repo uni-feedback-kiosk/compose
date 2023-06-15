@@ -8,6 +8,7 @@ TARGET_USER="kiosk"
 
 USER_FOLDER=$(eval echo ~$TARGET_USER)
 ASSET_PATH="${USER_FOLDER}/${ASSET_NAME}"
+USER_XINIT_PATH="${USER_FOLDER}/.xinitrc"
 
 create_user() {
   echo "Setting up kiosk user"
@@ -41,7 +42,8 @@ configure_launch() {
   sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/autologin.conf" | sudo tee "${CONFIG_FOLDER}/autologin.conf" >/dev/null
 
   echo "Copying xinit script"
-  sudo cp "${TEMPLATES_FOLDER}/.xinitrc" "$USER_FOLDER"
+  sudo cp "${TEMPLATES_FOLDER}/.xinitrc" "$USER_XINIT_PATH"
+  sudo chmod +x "$USER_XINIT_PATH"
 
   echo "Reloading systemd services"
   sudo systemctl daemon-reload
@@ -106,6 +108,11 @@ configure_app() {
 }
 
 download_app() {
+  if [ -f "$ASSET_PATH" ]
+  then
+    echo "${ASSET_PATH} already exists, skipping download"
+    return
+  fi
   echo "Downloading the application to ${ASSET_PATH}"
   sudo -u "$TARGET_USER" wget --no-verbose --show-progress -O "$ASSET_PATH" "https://github.com/${REPOSITORY}/releases/latest/download/${ASSET_NAME}"
   sudo chmod +x "$ASSET_PATH"
