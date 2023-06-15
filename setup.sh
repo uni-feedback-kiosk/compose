@@ -96,11 +96,11 @@ configure_app() {
   SED_COMMAND=""
   for variable in ASSET_PATH SMTP_HOST SMTP_PORT SMTP_USERNAME SMTP_PASSWORD SMTP_RECIPIENT
   do
-    SED_COMMAND+="s/\$${variable}/${!variable}/g; "
+    SED_COMMAND+="s|\$${variable}|${!variable}|g; "
   done
 
   echo "Substituting variables"
-  sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/app.env" | sudo tee "~${TARGET_USER}/.env" >/dev/null
+  sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/app.env" | sudo tee "${USER_FOLDER}/.env" >/dev/null
 
   echo -e "Done\n"
 }
