@@ -11,7 +11,7 @@ ASSET_PATH="${USER_FOLDER}/${ASSET_NAME}"
 USER_XINIT_PATH="${USER_FOLDER}/.xinitrc"
 
 create_user() {
-  echo "Setting up kiosk user"
+  echo "Set up kiosk user"
 
   if id "$TARGET_USER" >/dev/null 2>&1
   then
@@ -26,7 +26,7 @@ create_user() {
 }
 
 configure_launch() {
-  echo "Configuring automatic app launch"
+  echo "Configure automatic app launch"
 
   echo "Configuring getty@tty1 service"
   CONFIG_FOLDER="/etc/systemd/system/getty@tty1.service.d/"
@@ -52,7 +52,7 @@ configure_launch() {
 }
 
 configure_file_server() {
-  echo "Configuring file server"
+  echo "Configure file server"
 
   JWT_KEY="$(openssl rand -hex 32)"
 
@@ -82,7 +82,7 @@ configure_file_server() {
 }
 
 configure_app() {
-  echo "Configuring the app"
+  echo "Configure the app"
 
   echo -n "SMTP hostname (without port): "
   read SMTP_HOST
@@ -107,13 +107,23 @@ configure_app() {
   echo -e "Done\n"
 }
 
+install_docker() {
+  echo "Install Docker"
+  if [ -x "$(command -v docker)" ]
+  then
+    echo "Docker is already installed, skipping installation"
+    return
+  fi
+  wget -q -O- https://get.docker.com | sudo sh
+}
+
 download_app() {
+  echo "Download the application"
   if sudo -u "$TARGET_USER" test -f "$ASSET_PATH"
   then
     echo "${ASSET_PATH} already exists, skipping download"
     return
   fi
-  echo "Downloading the application to ${ASSET_PATH}"
   sudo -u "$TARGET_USER" wget --no-verbose --show-progress -O "$ASSET_PATH" "https://github.com/${REPOSITORY}/releases/latest/download/${ASSET_NAME}"
   sudo chmod +x "$ASSET_PATH"
 
@@ -124,7 +134,7 @@ finish() {
   echo "Reboot to see if the configuration works fine."
 }
 
-steps=(create_user configure_launch configure_file_server configure_app download_app finish)
+steps=(create_user configure_launch configure_file_server configure_app install_docker download_app finish)
 steps_count="${#steps[@]}"
 
 for i in "${!steps[@]}"
