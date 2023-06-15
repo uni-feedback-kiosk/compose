@@ -113,7 +113,11 @@ download_app() {
   echo -e "Done\n"
 }
 
-steps=(create_user configure_launch configure_file_server configure_app download_app)
+finish() {
+  echo "Reboot to see if the configuration works fine."
+}
+
+steps=(create_user configure_launch configure_file_server configure_app download_app finish)
 steps_count="${#steps[@]}"
 
 for i in "${!steps[@]}"
