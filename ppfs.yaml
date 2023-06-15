@@ -1,0 +1,17 @@
+# Values starting with $ have to be replaced
+
+# Can be generated with `openssl rand -hex 32`
+jwt_key: $JWT_KEY
+
+mongodb:
+  host: mongodb
+  username: $DB_USERNAME
+  password: $DB_PASSWORD
+
+users:
+  - username: $ADMIN_USERNAME
+    password: $ADMIN_PASSWORD
+    is_admin: true
+  - username: $USER_USERNAME
+    password: $USER_PASSWORD
+    is_admin: false

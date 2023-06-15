@@ -1,0 +1,44 @@
+version: '3.9'
+
+volumes:
+  files_db:
+
+
+services:
+  admin-panel:
+    image: ghcr.io/uni-feedback-kiosk/admin-app:latest
+    ports:
+    - "3000:80"
+
+  api-proxy:
+    image: ghcr.io/ntdesmond/gunicorn-nginx-proxy:latest
+    ports:
+    - "8000:80"
+    environment:
+      TARGET_HOSTNAME: api:8000
+
+  api:
+    image: ghcr.io/uni-feedback-kiosk/file-server:latest
+    build:
+      dockerfile: ./docker/Dockerfile
+      context: ./
+    volumes:
+      - ./ppfs.yaml:/etc/ppfs.yaml:ro
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    logging:
+      driver: json-file
+      options:
+        max-size: 1G
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${PPFS_MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${PPFS_MONGODB_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - files_db:/data/db:rw
+    logging:
+      driver: none
