@@ -29,7 +29,8 @@ configure_launch() {
 
   echo "Configuring getty service"
 
-  sudo mkdir -p /etc/systemd/system/getty@tty1.service.d/
+  CONFIG_FOLDER="/etc/systemd/system/getty@tty1.service.d/"
+  sudo mkdir -p "$CONFIG_FOLDER"
 
   SED_COMMAND=""
   for variable in TARGET_USER
@@ -38,10 +39,10 @@ configure_launch() {
   done
 
   echo "Substituting variables"
-  sudo sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/autologin.conf" > /etc/systemd/system/getty@tty1.service.d/autologin.conf
+  sed "$SED_COMMAND" "${TEMPLATES_FOLDER}/autologin.conf" | sudo tee "${CONFIG_FOLDER}/autologin.conf" >/dev/null
 
   echo "Copying xinit script"
-  sudo cp "${TEMPLATES_FOLDER}/.xinitrc" > "$USER_FOLDER"
+  sudo cp "${TEMPLATES_FOLDER}/.xinitrc" "$USER_FOLDER"
 
   echo -e "Done\n"
 }
