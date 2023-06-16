@@ -5,6 +5,13 @@ volumes:
 
 
 services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # 1800 s == 30 min
+    command: --interval 1800
+
   admin-panel:
     image: ghcr.io/uni-feedback-kiosk/admin-app:latest
     restart: unless-stopped
