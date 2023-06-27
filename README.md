@@ -1,6 +1,12 @@
 # Kiosk setup
 
-This repository helps to install and launch the kiosk system.
+> **Warning**
+>
+> Latest versions of the kiosk app are not built for Linux.
+>
+> The setup script uses a fixed version of the application that is latest for Linux at the time of changing this.
+
+This repository helps to install and launch the kiosk system on Linux.
 
 The setup script guides goes through the following steps:
 
