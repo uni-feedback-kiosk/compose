@@ -6,6 +6,8 @@ REPOSITORY="uni-feedback-kiosk/app"
 ASSET_NAME="uni-feedback-kiosk-app.AppImage"
 TARGET_USER="kiosk"
 
+APP_URL="https://github.com/${REPOSITORY}/releases/download/v1.1.1/${ASSET_NAME}"
+
 USER_FOLDER="/home/$TARGET_USER"
 ASSET_PATH="${USER_FOLDER}/${ASSET_NAME}"
 USER_XINIT_PATH="${USER_FOLDER}/.xinitrc"
@@ -124,7 +126,7 @@ download_app() {
     echo "${ASSET_PATH} already exists, skipping download"
     return
   fi
-  sudo -u "$TARGET_USER" wget --no-verbose --show-progress -O "$ASSET_PATH" "https://github.com/${REPOSITORY}/releases/latest/download/${ASSET_NAME}"
+  sudo -u "$TARGET_USER" wget --no-verbose --show-progress -O "$ASSET_PATH"  "$APP_URL"
   sudo chmod +x "$ASSET_PATH"
 
   echo -e "Done\n"
