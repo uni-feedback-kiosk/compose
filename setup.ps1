@@ -1,5 +1,9 @@
 $TEMPLATES_FOLDER = "./templates"
 
+$variables = @{
+    ASSET_PATH = "C:\Program Files\uni-feedback-kiosk\uni-feedback-kiosk-app.exe"
+}
+
 function Get-RandomString {
     param (
         [uint32]$Length
@@ -8,11 +12,9 @@ function Get-RandomString {
     -join (((48..57) + (97..122)) * 80 | Get-Random -Count $Length | ForEach-Object { [char]$_ }) 
 }
 
-$variables = @{}
-
 function Add-ServerConfig {
     Write-Host "Configure file server"
-    
+
     $variables["JWT_KEY"] = Get-RandomString -Length 40
   
     $variables["DB_USERNAME"] = "ppfs_db_$(Get-RandomString -Length 8)"
@@ -46,6 +48,10 @@ function Add-AppConfig {
     $variables["SMTP_USERNAME"] = Read-Host "SMTP username"
     $variables["SMTP_PASSWORD"] = Read-Host "SMTP password"
     $variables["SMTP_RECIPIENT"] = Read-Host "SMTP recipient"
+
+    if ($asset_path = Read-Host "Application path [$($variables["ASSET_PATH"])]") {
+        $variables["ASSET_PATH"] = $asset_path
+    }
   
     $replace_command = ""
     foreach ($pair in $variables.GetEnumerator()) {
