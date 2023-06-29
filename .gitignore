@@ -1,4 +1,11 @@
+# Docker and user app config
 *.env
 ppfs.yaml
 
+# Windows ICD output and generated access.xml
+*.cat
+*.ppkg
+access.xml
+
+# Except templates/ folder
 !templates/*

@@ -1,4 +1,5 @@
 $TEMPLATES_FOLDER = "./templates"
+$PROVISIONING_FOLDER = "./windows-provision"
 
 $variables = @{
     ASSET_PATH = "C:\Program Files\uni-feedback-kiosk\uni-feedback-kiosk-app.exe"
@@ -10,6 +11,23 @@ function Get-RandomString {
     )
 
     -join (((48..57) + (97..122)) * 80 | Get-Random -Count $Length | ForEach-Object { [char]$_ }) 
+}
+
+function Get-VariableSubstitution {
+    [CmdletBinding()]
+    param(
+        [parameter(ValueFromPipeline)]$Content,
+        [parameter(Mandatory, Position = 0)][hashtable]$Mapping
+    )
+
+    process {
+        $Result = $Content
+        foreach ($pair in $Mapping.GetEnumerator()) {
+            $Result = $Result.Replace("`$$($pair.Key)", "$($pair.Value)")
+        }
+
+        $Result
+    }
 }
 
 function Add-ServerConfig {
@@ -28,14 +46,9 @@ function Add-ServerConfig {
     $variables["USER_USERNAME"] = "ppfs_user_$(Get-RandomString -Length 6)"
     $variables["USER_PASSWORD"] = Get-RandomString -Length 40
   
-    $replace_command = ""
-    foreach ($pair in $variables.GetEnumerator()) {
-        $replace_command += ".Replace(""```$$($pair.Key)"", ""$($pair.Value)"")"
-    }
-  
     Write-Host "Substituting variables"
-    Invoke-Expression "(Get-Content ""${TEMPLATES_FOLDER}/.env"")${replace_command}" | Set-Content -Encoding UTF8 .env
-    Invoke-Expression "(Get-Content ""${TEMPLATES_FOLDER}/ppfs.yaml"")${replace_command}" | Set-Content -Encoding UTF8 ppfs.yaml
+    Get-Content "${TEMPLATES_FOLDER}/.env" | Get-VariableSubstitution $variables | Set-Content -Encoding UTF8 .env
+    Get-Content "${TEMPLATES_FOLDER}/ppfs.yaml" | Get-VariableSubstitution $variables | Set-Content -Encoding UTF8 ppfs.yaml
   
     Write-Host "Done`n"
 }
@@ -53,18 +66,28 @@ function Add-AppConfig {
         $variables["ASSET_PATH"] = $asset_path
     }
   
-    $replace_command = ""
-    foreach ($pair in $variables.GetEnumerator()) {
-        $replace_command += ".Replace(""```$$($pair.Key)"", ""$($pair.Value)"")"
-    }
-  
     Write-Host "Substituting variables"
-    Invoke-Expression "(Get-Content ""${TEMPLATES_FOLDER}/app.env"")${replace_command}" | Set-Content -Encoding UTF8 app.env
+    Get-Content "${TEMPLATES_FOLDER}/app.env" | Get-VariableSubstitution $variables | Set-Content -Encoding UTF8 app.env
   
     Write-Host "Done`n"
 }
 
-$steps = "Add-ServerConfig", "Add-AppConfig"
+function Add-KioskUser {
+    Write-Host "Creating the kiosk user"
+
+    Write-Host "Substituting variables"
+    Get-Content "${TEMPLATES_FOLDER}/access.xml" | Get-VariableSubstitution $variables | Set-Content -Encoding UTF8 "${PROVISIONING_FOLDER}/access.xml"
+  
+    Write-Host "Building provisioning package"
+    & "${PROVISIONING_FOLDER}/build.ps1"
+
+    Write-Host "Installing the package"
+    Install-ProvisioningPackage -Force -Quiet "${PROVISIONING_FOLDER}/kiosk.ppkg" | Out-Null
+
+    Write-Host "Done`n"
+}
+
+$steps = "Add-ServerConfig", "Add-AppConfig", "Add-KioskUser"
 for ($i = 0; $i -lt $steps.Count; $i++) {
     Write-Host -NoNewline "[$($i+1)/$($steps.Count)] "
     Invoke-Expression $steps[$i]

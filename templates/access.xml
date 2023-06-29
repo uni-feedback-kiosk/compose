@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<AssignedAccessConfiguration xmlns="http://schemas.microsoft.com/AssignedAccess/2017/config"
+  xmlns:r1809="http://schemas.microsoft.com/AssignedAccess/201810/config">
+  <Profiles>
+    <Profile Id="{5B328104-BD89-4863-AB27-4ED6EE355485}">
+      <AllAppsList>
+        <AllowedApps>
+          <App DesktopAppPath="$ASSET_PATH" r1809:AutoLaunch="true" r1809:AutoLaunchArguments="--relaunch" />
+        </AllowedApps>
+      </AllAppsList>
+      <StartLayout>
+        <![CDATA[<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+                      <LayoutOptions StartTileGroupCellWidth="6" />
+                      <DefaultLayoutOverride>
+                        <StartLayoutCollection>
+                          <defaultlayout:StartLayout GroupCellWidth="6">
+                            <start:Group Name="Kiosk">
+                              <start:DesktopApplicationTile Size="2x2" Column="0" Row="0" DesktopApplicationLinkPath="$ASSET_PATH" />
+                            </start:Group>
+                          </defaultlayout:StartLayout>
+                        </StartLayoutCollection>
+                      </DefaultLayoutOverride>
+                    </LayoutModificationTemplate>
+                ]]>
+      </StartLayout>
+      <Taskbar ShowTaskbar="false"/>
+    </Profile>
+  </Profiles>
+  <Configs>
+    <Config>
+      <Account>kiosk</Account>
+      <DefaultProfile Id="{5B328104-BD89-4863-AB27-4ED6EE355485}"/>
+    </Config>
+  </Configs>
+</AssignedAccessConfiguration>
+

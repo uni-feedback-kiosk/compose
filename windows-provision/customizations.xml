@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WindowsCustomizations>
+  <PackageConfig xmlns="urn:schemas-Microsoft-com:Windows-ICD-Package-Config.v1.0">
+    <ID>{346c9b76-d7d3-4810-b5a7-ba9a37e7c39a}</ID>
+    <Name>kiosk</Name>
+    <Version>1.0</Version>
+    <OwnerType>ITAdmin</OwnerType>
+    <Rank>0</Rank>
+  </PackageConfig>
+  <Settings xmlns="urn:schemas-microsoft-com:windows-provisioning">
+    <Customizations>
+      <Common>
+        <Accounts>
+          <Users>
+            <User UserName="kiosk" Name="kiosk">
+              <Password></Password>
+              <UserGroup>Standard Users</UserGroup>
+            </User>
+          </Users>
+        </Accounts>
+        <AssignedAccess>
+          <MultiAppAssignedAccessSettings>access.xml</MultiAppAssignedAccessSettings>
+        </AssignedAccess>
+        <OOBE>
+          <Desktop>
+            <HideOobe>True</HideOobe>
+          </Desktop>
+        </OOBE>
+        <SMISettings>
+          <AutoLogon>
+            <Enable>ENABLE</Enable>
+            <Password></Password>
+            <UserName>kiosk</UserName>
+          </AutoLogon>
+        </SMISettings>
+      </Common>
+    </Customizations>
+  </Settings>
+</WindowsCustomizations>
