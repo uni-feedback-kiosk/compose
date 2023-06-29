@@ -94,3 +94,5 @@ for ($i = 0; $i -lt $steps.Count; $i++) {
     Write-Host -NoNewline "[$($i+1)/$($steps.Count)] "
     Invoke-Expression $steps[$i]
 }
+
+Write-Host "You will need to run ""docker-compose up -d"" to start the file server."
