@@ -85,6 +85,8 @@ function Add-KioskUser {
     Install-ProvisioningPackage -Force -Quiet "${PROVISIONING_FOLDER}/kiosk.ppkg" | Out-Null
 
     Write-Host "Done`n"
+
+    Write-Host "You will need to log into the newly created user, return with Ctrl+Alt+Delete and run ./setenv.ps1 as admin."
 }
 
 $steps = "Add-ServerConfig", "Add-AppConfig", "Add-KioskUser"
