@@ -68,6 +68,9 @@ function Add-AppConfig {
   
     Write-Host "Substituting variables"
     Get-Content "${TEMPLATES_FOLDER}/app.env" | Get-VariableSubstitution $variables | Set-Content -Encoding UTF8 app.env
+
+    Write-Host "Disabling automatic updates"
+    Write-Output "VITE_NOUPDATE=1" | Add-Content -Encoding UTF8 app.env
   
     Write-Host "Done`n"
 }

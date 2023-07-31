@@ -5,7 +5,7 @@
     <Profile Id="{5B328104-BD89-4863-AB27-4ED6EE355485}">
       <AllAppsList>
         <AllowedApps>
-          <App DesktopAppPath="$ASSET_PATH" r1809:AutoLaunch="true" r1809:AutoLaunchArguments="--relaunch" />
+          <App DesktopAppPath="$ASSET_PATH" r1809:AutoLaunch="true" />
         </AllowedApps>
       </AllAppsList>
       <StartLayout>
